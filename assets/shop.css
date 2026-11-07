@@ -110,6 +110,10 @@ button{font-family:inherit;cursor:pointer}
 .sterne-zeile{display:flex;align-items:center;gap:8px;font-size:14px;text-decoration:none}
 .sterne{display:inline-flex;gap:1px;color:var(--stern)}
 .sterne svg{width:16px;height:16px}
+.stern-teil{position:relative;display:inline-block;line-height:0}
+.stern-teil>svg{display:block;opacity:.28}
+.stern-teil span{position:absolute;left:0;top:0;bottom:0;overflow:hidden}
+.stern-teil span svg{display:block;max-width:none}
 .sterne-zeile b{font-weight:800}
 .sterne-zeile u{color:var(--grau);text-underline-offset:3px}
 .titel{font-size:27px;line-height:1.12;font-weight:850;letter-spacing:-.015em;margin:8px 0 6px}
@@ -248,8 +252,12 @@ button{font-family:inherit;cursor:pointer}
 .bew-schnitt b{font-size:46px;font-weight:900;line-height:1;display:block}
 .bew-schnitt .sterne svg{width:20px;height:20px}
 .bew-schnitt small{display:block;color:var(--grau);font-size:13.5px;margin-top:4px}
-.balken{display:grid;gap:5px;font-size:13px}
-.balken div{display:grid;grid-template-columns:28px 1fr 26px;gap:8px;align-items:center;color:var(--grau)}
+.balken{display:grid;gap:0;font-size:13px}
+.balken button{display:grid;grid-template-columns:28px 1fr 26px;gap:8px;align-items:center;width:100%;min-height:44px;margin:0;padding:0 8px;border:0;border-radius:8px;background:none;color:var(--grau);font-size:13px;text-align:left;touch-action:manipulation}
+.balken button:disabled{cursor:default}
+.balken button.an{background:var(--creme);color:var(--text);font-weight:800}
+@media(min-width:700px){.balken button{min-height:32px}}
+.bew-status{max-width:820px;margin:0 auto 12px;text-align:center;color:var(--grau);font-size:14px}
 .balken em{height:8px;border-radius:4px;background:#EEE9E2;overflow:hidden;display:block}
 .balken em i{display:block;height:100%;background:var(--stern);border-radius:4px}
 .bew-filter{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;max-width:820px;margin:0 auto 14px}

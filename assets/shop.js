@@ -249,21 +249,31 @@
 
   // ---------- Bewertungen: erst 6 zeigen, Filter nach Thema zeigt alle des Themas
   const bewListe = $('[data-kurz]'); const mehr = $('[data-mehr]')
-  let bewFilter = 'alle'; let bewZahl = 6
+  const bewStatus = $('[data-bew-status]')
+  let bewFilter = 'alle'; let bewZahl = 6; let bewSterne = 0
   const zeigeBew = () => {
     let n = 0
     $$('.bew', bewListe).forEach(r => {
-      const passt = bewFilter === 'alle' || r.dataset.thema.split(' ').includes(bewFilter)
+      const passt = bewSterne ? +r.dataset.sterne === bewSterne : bewFilter === 'alle' || r.dataset.thema.split(' ').includes(bewFilter)
       if (passt) n++
       r.hidden = !passt || n > bewZahl
     })
     if (mehr) { mehr.hidden = n <= bewZahl; mehr.textContent = `Show more reviews (${n - bewZahl} left)` }
+    if (bewStatus) { bewStatus.hidden = !bewSterne; bewStatus.textContent = `Showing ${n} ${n === 1 ? 'review' : 'reviews'} with ${bewSterne} ${bewSterne === 1 ? 'star' : 'stars'}` }
   }
   if (bewListe) zeigeBew()
   mehr?.addEventListener('click', () => { bewZahl += 12; zeigeBew() })
+  const sternZeilen = () => $$('.balken button').forEach(x => { const an = +x.dataset.sterne === bewSterne; x.classList.toggle('an', an); x.setAttribute('aria-pressed', an) })
   $$('.bew-filter button').forEach(b => b.addEventListener('click', () => {
     $$('.bew-filter button').forEach(x => x.classList.toggle('an', x === b))
-    bewFilter = b.dataset.filter; bewZahl = 6; zeigeBew()
+    bewFilter = b.dataset.filter; bewZahl = 6; bewSterne = 0; sternZeilen(); zeigeBew()
+  }))
+  // Sternfilter: Zeile antippen zeigt nur diese Sterne, nochmal antippen oder ein Themenfilter hebt ihn auf
+  $$('.balken button').forEach(b => b.addEventListener('click', () => {
+    const s = +b.dataset.sterne; bewSterne = bewSterne === s ? 0 : s; bewFilter = 'alle'; bewZahl = 6
+    sternZeilen(); $$('.bew-filter button').forEach(x => x.classList.toggle('an', !bewSterne && x.dataset.filter === 'alle')); zeigeBew()
+    const y = bewListe.getBoundingClientRect().top
+    if (y > innerHeight * .6) window.scrollTo({ top: scrollY + y - 150, behavior: 'smooth' })
   }))
 
   // Einstieg aus Anzeige oder Startseite: ?for=kids wählt die Kinderseite, &qty=2 das Doppel
